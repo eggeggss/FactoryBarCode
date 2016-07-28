@@ -1,6 +1,7 @@
 The Barcode scanner is aim to provide a scanner tool to send data into html web through android webview.
 Your html need to implement these javascript.
 
+example:
 
  function msg(content) 
  {
