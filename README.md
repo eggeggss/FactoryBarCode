@@ -15,4 +15,5 @@ Your html need to implement these javascript.
   After this implementing, 
   The barcode scanner will scan the qrcode and fetch the text result into your web if your html have been implement "function msg(content)".
   Then you can use DOM or JQuery selector to analysis data into your web application.
-  You can find the app in Google Play Store "HTML5 Barcoder"
+  You can find the app in Google Play Store "HTML5 Barcoder".
+  The Developer tool is Xamarin.android.classic using c#.
