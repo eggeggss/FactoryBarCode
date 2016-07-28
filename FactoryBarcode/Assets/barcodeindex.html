@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <lu>
+        <li> 姓名 : <input type="text" id="txt_name"></input></li>
+        <br>
+        <li> 工號 : <input type="text" id="txt_id"></input></li>
+        <br>
+        <li>
+            <textarea rows="10" cols="50">
+                At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+            </textarea>
+        </li>
+    </lu>
+    <br>
+    <button onclick='HtmlToAndroid();'>BarCode Scanner</button>
+    <script type="text/javascript">
+        function msg(content) {
+            alert(content);
+        }
+
+        function HtmlToAndroid() {
+            var msg = document.getElementById('txt_name').value;
+            window.control.HtmlMessage(msg)
+
+        }
+    </script>
+</body>
+</html>
