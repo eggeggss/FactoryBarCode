@@ -1,7 +1,5 @@
-# FactoryBarcode
-Xamarin.Android
-barcode scanner to Web
-your html need to implement the javascript
+The Barcode scanner is aim to provide a scanner tool to send data into html web through android webview.
+your html need to implement these javascript.
  
  function msg(content) {
             document.getElementById('textarea1').value = content;
@@ -12,7 +10,7 @@ your html need to implement the javascript
             document.getElementById('txt_name').value = json.user_name;
   }
   
-  After the implementing, 
-  The barcode scanner will scan the qrcode and fetch the text result into your web through if your html have the "function msg(content)".
-  Then you can use DOM or JQuery selector to analysis data to your application
+  After this implementing, 
+  The barcode scanner will scan the qrcode and fetch the text result into your web if your html have been implement "function msg(content)".
+  Then you can use DOM or JQuery selector to analysis data into your web application
    
