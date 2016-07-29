@@ -3,22 +3,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <Button
-      android:id="@+id/btnInsert"
-      android:layout_width="match_parent"
-      android:layout_height="50dp"
-      android:textSize="16sp"
-      android:layout_gravity="center"
-      android:background="#00008B"
-      android:text="手動新增報表"
-      android:layout_weight=".030" />
   <TextView
       android:layout_width="match_parent"
       android:layout_height="20dp"
       android:text="下拉載入清單"
       android:layout_gravity="fill_vertical"
       android:gravity="center_horizontal"
-      android:layout_weight=".030" />
+      android:background="#EEE8AA"
+      android:layout_weight=".10" />
   <android.support.v4.widget.SwipeRefreshLayout
       android:id="@+id/refresher1"
       android:layout_width="match_parent"
@@ -31,13 +23,4 @@
         android:minWidth="25px"
         android:minHeight="25px" />
   </android.support.v4.widget.SwipeRefreshLayout>
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="v1.1 Copyright © 2016 Arcadyacn Inc. All rights reserved"
-      android:background="#90EE90"
-      android:textSize="8sp"
-      android:layout_gravity="fill_vertical"
-      android:gravity="center_horizontal"
-      android:layout_weight=".030" />
 </LinearLayout>

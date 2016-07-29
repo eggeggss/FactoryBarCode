@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+  <ImageView
+      android:src="@drawable/icon512"
+      android:layout_width="match_parent"
+      android:layout_height="64dp"
+      android:scaleType="center"
+      android:background="#87CEFA" />
+  <TextView
+      android:id="@+id/txtWepApi"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="4dp"
+      android:layout_marginRight="4dp"
+      android:layout_marginBottom="4dp"
+      android:text="SetUp Your Wep API" />
+  <EditText
+      android:id="@+id/editUri"
+      android:inputType="textUri"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:layout_marginLeft="4dp"
+      android:layout_marginRight="4dp"
+      android:layout_marginBottom="16dp"
+      android:fontFamily="sans-serif"
+      android:hint="https://azure.microsoft.com/zh-tw/" />
+  <TextView
+       android:id="@+id/txtWepApi"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="16dp"
+       android:layout_marginLeft="4dp"
+       android:layout_marginRight="4dp"
+       android:layout_marginBottom="4dp"
+       android:text="Teaching" />
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="https://github.com/eggeggss/FactoryBarcode"
+      android:autoLink="web"
+      android:id="@+id/infoTxtCredits"
+      android:layout_centerInParent="true"
+      android:linksClickable="true" />
+</LinearLayout>

@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Content.Res;
 using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.Widget;
@@ -21,7 +22,7 @@ namespace FactoryBarcode
         void CallWebViewSendData();
     }
 
-    [Activity(Label = "FactoryBarcode", MainLauncher = false, Icon = "@drawable/Barcode", ConfigurationChanges = Android.Content.PM.ConfigChanges.Keyboard | Android.Content.PM.ConfigChanges.KeyboardHidden | Android.Content.PM.ConfigChanges.Orientation, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    [Activity(Label = "HTML5 Barcoder", MainLauncher = false, Icon = "@drawable/Barcode", ConfigurationChanges = Android.Content.PM.ConfigChanges.Keyboard | Android.Content.PM.ConfigChanges.KeyboardHidden | Android.Content.PM.ConfigChanges.Orientation, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity, IBarCodeToHtmlBehavior
     {
         private int count = 1;

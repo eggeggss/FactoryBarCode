@@ -10,6 +10,11 @@ using System.Text;
 
 namespace MyUtil
 {
+    public class AppSetting
+    {
+        public String WebAPI { set; get; }
+    }
+
     public class Item : IComparable<Item>
     {
         [SQLite.PrimaryKey, SQLite.AutoIncrement]
@@ -34,9 +39,8 @@ namespace MyUtil
         {
             _conn = new SQLiteConnection(System.IO.Path.Combine(folder, "droid.db"));
 
-            //_conn = new SQLiteConnection(path);
-
             _conn.CreateTable<Item>();
+            _conn.CreateTable<AppSetting>();
         }
 
         public List<Item> SelectItem()
@@ -44,6 +48,11 @@ namespace MyUtil
             List<Item> items = _conn.Table<Item>().ToList<Item>();
             items.Sort();
             return items;
+        }
+
+        public List<AppSetting> SelectAppSetting()
+        {
+            return _conn.Table<AppSetting>().ToList<AppSetting>();
         }
 
         #region InsertItem
@@ -62,6 +71,18 @@ namespace MyUtil
             }
 
             // _conn.InsertAll(list);
+        }
+
+        public void UpdateOrInsertAppSetting(AppSetting appsetting)
+        {
+            if (this.SelectAppSetting().Count == 0)
+            {
+                _conn.Insert(appsetting);
+            }
+            else
+            {
+                _conn.Update(appsetting);
+            }
         }
 
         #endregion InsertItem

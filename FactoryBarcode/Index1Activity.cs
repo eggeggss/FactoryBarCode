@@ -1,5 +1,7 @@
 using Android.App;
 using Android.Content;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.Widget;
@@ -23,16 +25,69 @@ namespace FactoryBarcode
         void DeleteItem(Item item);
     }
 
-    [Activity(Label = "FactoryBarcode", MainLauncher = true, Icon = "@drawable/Barcode")]
+    [Activity(Label = "HTML5 BarCoder", MainLauncher = true, Icon = "@drawable/Barcode")]
     public class Index1Activity : Activity, ICommucatable
     {
         public ItemDB _itemdb;
+        private MyList adapter;
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.menu, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.action_add:
+                    View v = this.LayoutInflater.Inflate(Resource.Layout.Dialog, null);
+
+                    EventHandler<DialogClickEventArgs> ok = new EventHandler<DialogClickEventArgs>((s2, e2) =>
+                    {
+                        String descrip = v.FindViewById<EditText>(Resource.Id.editDescrip).Text;
+                        String uri = v.FindViewById<EditText>(Resource.Id.editUri).Text;
+
+                        Item itemNew = new Item() { Descrip = descrip, Link = uri };
+
+                        this._itemdb.InsertItem(itemNew);
+                        adapter.List.Add(itemNew);
+                        adapter.List.Sort();
+                        adapter.NotifyDataSetChanged();
+                        //Toast.MakeText(this, descrip, ToastLength.Short).Show();
+                    });
+
+                    Util.InputDialog(this, v, ok, null);
+
+                    return true;
+
+                case Resource.Id.action_settings:
+
+                    View viewAppsetting = this.LayoutInflater.Inflate(Resource.Layout.AppSetting, null);
+
+                    Util.InputDialog(this, viewAppsetting, null, null);
+
+                    //Toast.MakeText(this, "setting", ToastLength.Short).Show();
+                    return true;
+
+                default:
+                    // If we got here, the user's action was not recognized.
+                    // Invoke the superclass to handle it.
+                    return base.OnOptionsItemSelected(item);
+            }
+            return base.OnOptionsItemSelected(item);
+        }
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            RequestWindowFeature(WindowFeatures.NoTitle);
+            RequestWindowFeature(WindowFeatures.ActionBar);
             SetContentView(Resource.Layout.Index1);
+
+            ColorDrawable color = new ColorDrawable(Color.OrangeRed);
+
+            this.ActionBar.SetBackgroundDrawable(color);
 
             List<Item> list = new List<Item>();
             list.Add(new Item() { Descrip = "DevExpress", Link = "https://www.devexpress.com/" });
@@ -54,33 +109,11 @@ namespace FactoryBarcode
 
             var listview = this.FindViewById<ListView>(Resource.Id.listview);
 
-            MyList adapter = new MyList();
+            adapter = new MyList();
 
             adapter.Context = this;
             adapter.List = listFromDb;
             listview.Adapter = adapter;
-
-            var btnInsert = this.FindViewById<Button>(Resource.Id.btnInsert);
-            btnInsert.Click += (s1, e1) =>
-            {
-                View v = this.LayoutInflater.Inflate(Resource.Layout.Dialog, null);
-
-                EventHandler<DialogClickEventArgs> ok = new EventHandler<DialogClickEventArgs>((s2, e2) =>
-                {
-                    String descrip = v.FindViewById<EditText>(Resource.Id.editDescrip).Text;
-                    String uri = v.FindViewById<EditText>(Resource.Id.editUri).Text;
-
-                    Item item = new Item() { Descrip = descrip, Link = uri };
-
-                    this._itemdb.InsertItem(item);
-                    adapter.List.Add(item);
-                    adapter.List.Sort();
-                    adapter.NotifyDataSetChanged();
-                    //Toast.MakeText(this, descrip, ToastLength.Short).Show();
-                });
-
-                Util.InputDialog(this, v, ok, null);
-            };
 
             var refresh = this.FindViewById<SwipeRefreshLayout>(Resource.Id.refresher1);
 
