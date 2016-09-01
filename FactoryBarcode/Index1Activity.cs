@@ -25,7 +25,7 @@ namespace FactoryBarcode
         void DeleteItem(Item item);
     }
 
-    [Activity(Label = "HTML5 BarCoder", MainLauncher = true, Icon = "@drawable/Barcode")]
+    [Activity(Label = "HTML5 BarCoder", MainLauncher = true, Icon = "@drawable/icon512")]
     public class Index1Activity : Activity, ICommucatable
     {
         public ItemDB _itemdb;

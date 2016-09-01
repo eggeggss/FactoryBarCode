@@ -22,12 +22,13 @@ namespace FactoryBarcode
         void CallWebViewSendData();
     }
 
-    [Activity(Label = "HTML5 Barcoder", MainLauncher = false, Icon = "@drawable/Barcode", ConfigurationChanges = Android.Content.PM.ConfigChanges.Keyboard | Android.Content.PM.ConfigChanges.KeyboardHidden | Android.Content.PM.ConfigChanges.Orientation, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+    [Activity(Label = "HTML5 Barcoder", MainLauncher = false, Icon = "@drawable/icon512", ConfigurationChanges = Android.Content.PM.ConfigChanges.Keyboard | Android.Content.PM.ConfigChanges.KeyboardHidden | Android.Content.PM.ConfigChanges.Orientation, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity, IBarCodeToHtmlBehavior
     {
         private int count = 1;
         private WebView wv;
         private SwipeRefreshLayout refresher;
+        private Item item;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -38,7 +39,7 @@ namespace FactoryBarcode
             SetContentView(Resource.Layout.Main);
 
             var j = this.Intent.GetStringExtra("ItemRow");
-            Item item = JsonConvert.DeserializeObject<Item>(j);
+            item = JsonConvert.DeserializeObject<Item>(j);
 
             FindViewById<TextView>(Resource.Id.txtTitle).Text = item.Descrip;
             //back
@@ -56,6 +57,16 @@ namespace FactoryBarcode
            };
 
             btnScan.SetBackgroundResource(Resource.Drawable.Barcode2);
+
+            Information info = new Information() { user_id = "A110018", user_name = "Roger Roan" };
+            String content = JsonConvert.SerializeObject(info, Formatting.None);
+
+            MobileBarcodeScanner.Initialize(Application);
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
 
             wv = this.FindViewById<WebView>(Resource.Id.webview);
             refresher = FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
@@ -84,15 +95,19 @@ namespace FactoryBarcode
 
             wv.LoadUrl(item.Link);
 
-            Information info = new Information() { user_id = "A110018", user_name = "Roger Roan" };
-            String content = JsonConvert.SerializeObject(info, Formatting.None);
-
-            MobileBarcodeScanner.Initialize(Application);
-
             refresher.Refresh += delegate
-           {
-               wv.Reload();
-           };
+            {
+                wv.Reload();
+            };
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+
+            wv.LoadUrl("about:blank");
+
+            //wv.Destroy();
         }
 
         public async void CallWebViewSendData()

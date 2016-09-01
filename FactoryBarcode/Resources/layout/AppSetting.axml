@@ -30,14 +30,14 @@
       android:fontFamily="sans-serif"
       android:hint="https://azure.microsoft.com/zh-tw/" />
   <TextView
-       android:id="@+id/txtWepApi"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="16dp"
-       android:layout_marginLeft="4dp"
-       android:layout_marginRight="4dp"
-       android:layout_marginBottom="4dp"
-       android:text="Teaching" />
+      android:id="@+id/txtWepApi"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="4dp"
+      android:layout_marginRight="4dp"
+      android:layout_marginBottom="4dp"
+      android:text="Teaching" />
   <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -46,4 +46,9 @@
       android:id="@+id/infoTxtCredits"
       android:layout_centerInParent="true"
       android:linksClickable="true" />
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="version 1.2"
+      android:layout_centerInParent="true" />
 </LinearLayout>
