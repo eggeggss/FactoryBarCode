@@ -62,11 +62,6 @@ namespace FactoryBarcode
             String content = JsonConvert.SerializeObject(info, Formatting.None);
 
             MobileBarcodeScanner.Initialize(Application);
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
 
             wv = this.FindViewById<WebView>(Resource.Id.webview);
             refresher = FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
@@ -99,6 +94,13 @@ namespace FactoryBarcode
             {
                 wv.Reload();
             };
+
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
         }
 
         protected override void OnStop()
