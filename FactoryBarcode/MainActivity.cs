@@ -29,7 +29,6 @@ namespace FactoryBarcode
         private WebView wv;
         private SwipeRefreshLayout refresher;
         private Item item;
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -40,6 +39,9 @@ namespace FactoryBarcode
 
             var j = this.Intent.GetStringExtra("ItemRow");
             item = JsonConvert.DeserializeObject<Item>(j);
+
+
+            
 
             FindViewById<TextView>(Resource.Id.txtTitle).Text = item.Descrip;
             //back
@@ -107,7 +109,7 @@ namespace FactoryBarcode
         {
             base.OnStop();
 
-            wv.LoadUrl("about:blank");
+           // wv.LoadUrl("about:blank");
 
             //wv.Destroy();
         }
@@ -115,7 +117,16 @@ namespace FactoryBarcode
         public async void CallWebViewSendData()
         {
             var scanner = new ZXing.Mobile.MobileBarcodeScanner();
-            var result = await scanner.Scan();
+
+            var options = new ZXing.Mobile.MobileBarcodeScanningOptions();
+            
+            options.DelayBetweenAnalyzingFrames = 5000;
+            options.UseNativeScanning = true;
+
+            scanner.TopText = "Scanning.."; 
+            scanner.Torch(true);
+            
+            var result = await scanner.Scan(options);
 
             if (result != null)
             {

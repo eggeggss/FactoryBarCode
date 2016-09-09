@@ -47,6 +47,33 @@ namespace FactoryBarcode
 		public partial class Color
 		{
 			
+			// aapt resource value: 0x7f04000a
+			public const int bright_green = 2130968586;
+			
+			// aapt resource value: 0x7f04000b
+			public const int button_green = 2130968587;
+			
+			// aapt resource value: 0x7f04000e
+			public const int deep_pure = 2130968590;
+			
+			// aapt resource value: 0x7f04000c
+			public const int gold = 2130968588;
+			
+			// aapt resource value: 0x7f040009
+			public const int green_dark = 2130968585;
+			
+			// aapt resource value: 0x7f040008
+			public const int green_temp = 2130968584;
+			
+			// aapt resource value: 0x7f040010
+			public const int light_blue = 2130968592;
+			
+			// aapt resource value: 0x7f04000d
+			public const int light_gold = 2130968589;
+			
+			// aapt resource value: 0x7f04000f
+			public const int light_pure = 2130968591;
+			
 			// aapt resource value: 0x7f040001
 			public const int menu_text_color = 2130968577;
 			
@@ -88,22 +115,31 @@ namespace FactoryBarcode
 			public const int Add = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int Barcode = 2130837505;
+			public const int back_selector = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int Barcode2 = 2130837506;
+			public const int Barcode = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int custom_background = 2130837507;
+			public const int Barcode2 = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int Icon = 2130837508;
+			public const int button_selector = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int icon512 = 2130837509;
+			public const int custom_background = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public const int Settings = 2130837510;
+			public const int delete_selector = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int Icon = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int icon512 = 2130837512;
+			
+			// aapt resource value: 0x7f020009
+			public const int Settings = 2130837513;
 			
 			static Drawable()
 			{

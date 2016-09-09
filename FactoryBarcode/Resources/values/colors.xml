@@ -8,4 +8,13 @@
   <color name="xam_green">#77D065</color>
   <color name="xam_gray">#738182</color>
   <color name="xam_light_gray">#B4BCBC</color>
+  <color name="green_temp">#23A96E</color>
+  <color name="green_dark">#159204</color>
+  <color name="bright_green">#02D8B0</color>
+  <color name="button_green">#10a54a</color>
+  <color name="gold">#FFD700</color>
+  <color name="light_gold">#FFEE95</color>
+  <color name="deep_pure">#800080</color>
+  <color name="light_pure">#DA70D6</color>
+  <color name="light_blue">#1E90FF</color>
 </resources>

@@ -12,6 +12,7 @@
         android:layout_height="50dp"
         android:layout_gravity="right"
         android:id="@+id/btnBack"
+        android:background="@drawable/back_selector"
         android:text="Back" />
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
         android:id="@+id/NoTitle"
         android:text="         " />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"

@@ -95,7 +95,6 @@ namespace FactoryBarcode
             list.Add(new Item() { Descrip = "©_¼¯", Link = "http://www.yahoo.com.tw" });
             list.Add(new Item() { Descrip = "Google", Link = "http://www.google.com" });
             list.Add(new Item() { Descrip = "facebook", Link = "http://www.facebook.com" });
-            list.Add(new Item() { Descrip = "YouTube", Link = "https://www.youtube.com/?hl=zh-TW&gl=TW" });
             list.Add(new Item() { Descrip = "PCHOME", Link = "http://www.pchome.com.tw/" });
             list.Add(new Item() { Descrip = "Roger´ú¸Õ³øªí", Link = "http://eggeggss.ddns.net/notesbarcode/notesservice1.aspx" });
 
