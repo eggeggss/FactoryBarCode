@@ -92,11 +92,15 @@ namespace FactoryBarcode
             List<Item> list = new List<Item>();
             list.Add(new Item() { Descrip = "DevExpress", Link = "https://www.devexpress.com/" });
             list.Add(new Item() { Descrip = "Xamarin", Link = "https://www.xamarin.com/" });
-            list.Add(new Item() { Descrip = "奇摩", Link = "http://www.yahoo.com.tw" });
-            list.Add(new Item() { Descrip = "Google", Link = "http://www.google.com" });
-            list.Add(new Item() { Descrip = "facebook", Link = "http://www.facebook.com" });
-            list.Add(new Item() { Descrip = "PCHOME", Link = "http://www.pchome.com.tw/" });
-            list.Add(new Item() { Descrip = "Roger測試報表", Link = "http://eggeggss.ddns.net/notesbarcode/notesservice1.aspx" });
+            list.Add(new Item() { Descrip = "Microsoft", Link = "https://www.microsoft.com/zh-cn" });
+            list.Add(new Item() { Descrip = "百度雲", Link = "https://login.bce.baidu.com/" });
+            list.Add(new Item() { Descrip = "小米官網", Link = "http://www.mi.com/tw/events/school831/" });
+            //list.Add(new Item() { Descrip = "奇摩", Link = "http://www.yahoo.com.tw" });
+            //list.Add(new Item() { Descrip = "Google", Link = "http://www.google.com" });
+            //list.Add(new Item() { Descrip = "facebook", Link = "http://www.facebook.com" });
+            //list.Add(new Item() { Descrip = "PCHOME", Link = "http://www.pchome.com.tw/" });
+
+            list.Add(new Item() { Descrip = "測試報表", Link = "http://eggeggss.ddns.net/notesbarcode/notesservice1.aspx" });
 
             string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             _itemdb = new ItemDB(folder);

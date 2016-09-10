@@ -40,16 +40,21 @@ namespace FactoryBarcode
             var j = this.Intent.GetStringExtra("ItemRow");
             item = JsonConvert.DeserializeObject<Item>(j);
 
+            ColorDrawable color = new ColorDrawable(Color.OrangeRed);
 
-            
+            var actionBar=FindViewById<LinearLayout>(Resource.Id.actonBar);
+
+            actionBar.SetBackgroundDrawable(color);
 
             FindViewById<TextView>(Resource.Id.txtTitle).Text = item.Descrip;
             //back
-            this.FindViewById<Button>(Resource.Id.btnBack).Click += (s1, e1) =>
+            ImageButton btnBack = this.FindViewById<ImageButton>(Resource.Id.btnBack);
+            btnBack.Click += (s1, e1) =>
             {
                 this.Finish();
                 // wv.GoBack();
             };
+            btnBack.SetBackgroundResource(Resource.Drawable.back);
             //scan
             ImageButton btnScan = this.FindViewById<ImageButton>(Resource.Id.btnScan);
 
