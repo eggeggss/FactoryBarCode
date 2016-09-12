@@ -5,7 +5,7 @@
     android:layout_height="80dp"
     android:background="@drawable/custom_background"
     android:gravity="center_vertical">
-  <TextView
+  <Button
       android:text="工廠作業報表一"
       android:textSize="16sp"
       android:textColor="#6A5ACD"

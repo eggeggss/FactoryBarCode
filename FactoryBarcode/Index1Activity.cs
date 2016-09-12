@@ -30,6 +30,7 @@ namespace FactoryBarcode
     {
         public ItemDB _itemdb;
         private MyList adapter;
+        public Int32 mDeviceWidth, mDeviceHeight;
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -85,6 +86,11 @@ namespace FactoryBarcode
             RequestWindowFeature(WindowFeatures.ActionBar);
             SetContentView(Resource.Layout.Index1);
 
+            Display display= this.WindowManager.DefaultDisplay;
+
+            this.mDeviceHeight = display.Height;
+            this.mDeviceWidth = display.Width;
+
             ColorDrawable color = new ColorDrawable(Color.OrangeRed);
 
             this.ActionBar.SetBackgroundDrawable(color);
@@ -118,6 +124,8 @@ namespace FactoryBarcode
 
             adapter.Context = this;
             adapter.List = listFromDb;
+            adapter.DeviceHeight = this.mDeviceHeight;
+            adapter.DeviceWidth = this.mDeviceWidth;
             listview.Adapter = adapter;
 
             var refresh = this.FindViewById<SwipeRefreshLayout>(Resource.Id.refresher1);
@@ -143,6 +151,9 @@ namespace FactoryBarcode
     {
         public Index1Activity Context;
         public List<Item> List;
+        public Int32 DeviceWidth,DeviceHeight;
+
+
 
         public override Item this[int position]
         {
@@ -175,6 +186,7 @@ namespace FactoryBarcode
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
+            Button btnDescrip=null;
             //前面幾筆進來時回收區還是空的
             //註冊在這邊是因為後面的view都用這個回收的所以初始註冊一次即可
             if (convertView == null)
@@ -222,17 +234,56 @@ namespace FactoryBarcode
 
                    Util.Dialog(this.Context, "Information", "Are You Sure To Delete?", okDelegate, null);
                };
+
+                btnDescrip = convertView.FindViewById<Button>(Resource.Id.descrip);
+
+                btnDescrip.Click += (s1, e1) => {
+                    var thisbtn = s1 as Button;
+                    Int32 ll_position = Convert.ToInt32(thisbtn.Tag);
+
+                    var item_row = this.List[ll_position];
+                    String itemRowJson = JsonConvert.SerializeObject(item_row);
+
+                    Intent intent = new Intent();
+                    intent.SetClass(this.Context, typeof(MainActivity));
+                    intent.PutExtra("ItemRow", itemRowJson);
+
+                    this.Context.StartActivity(intent);
+
+                };
             }
+
             Item item = List[position];
             var btn = convertView.FindViewById<Button>(Resource.Id.btn_open);
             var btnDel = convertView.FindViewById<Button>(Resource.Id.btn_delete);
+            btnDescrip = convertView.FindViewById<Button>(Resource.Id.descrip);
             btn.Tag = position;
+            btnDescrip.Tag = position;
             btnDel.Tag = position;
-            convertView.FindViewById<TextView>(Resource.Id.descrip).Text = item.Descrip;
+            
+            btnDescrip.Text = item.Descrip;
 
+            var layoutDescrip=btnDescrip.LayoutParameters;
+            layoutDescrip.Width = DeviceWidth-150;
+
+            var layoutBtn = btn.LayoutParameters;
+            layoutBtn.Width =   150;
+
+
+            var layoutDel = btnDel.LayoutParameters;
+            layoutDel.Width = 150;
+
+
+            //btnDescrip.SetWidth(1000);
             return convertView;
 
             //throw new NotImplementedException();
         }
+
+        //btnDescrip.SetWidth(btnDescrip.Width - 1000);
+
+        
+
+
     }
 }
