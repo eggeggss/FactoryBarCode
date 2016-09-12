@@ -99,6 +99,8 @@ namespace FactoryBarcode
             //list.Add(new Item() { Descrip = "Google", Link = "http://www.google.com" });
             //list.Add(new Item() { Descrip = "facebook", Link = "http://www.facebook.com" });
             //list.Add(new Item() { Descrip = "PCHOME", Link = "http://www.pchome.com.tw/" });
+            
+            list.Add(new Item() { Descrip = "Xpage測試報表", Link = "http://arc-ap2.arcadyan.com.tw/GP/VendorReport.nsf/TEST.xsp" });
 
             list.Add(new Item() { Descrip = "測試報表", Link = "http://eggeggss.ddns.net/notesbarcode/notesservice1.aspx" });
 

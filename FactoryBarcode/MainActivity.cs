@@ -6,6 +6,7 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.Widget;
+using Android.Util;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
@@ -23,11 +24,11 @@ namespace FactoryBarcode
     }
 
     [Activity(Label = "HTML5 Barcoder", MainLauncher = false, Icon = "@drawable/icon512", ConfigurationChanges = Android.Content.PM.ConfigChanges.Keyboard | Android.Content.PM.ConfigChanges.KeyboardHidden | Android.Content.PM.ConfigChanges.Orientation, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-    public class MainActivity : Activity, IBarCodeToHtmlBehavior
+    public class MainActivity : Activity, IBarCodeToHtmlBehavior, CustomSwipeRefreshLayout.CanChildScrollUpCallback
     {
         private int count = 1;
         private WebView wv;
-        private SwipeRefreshLayout refresher;
+        private CustomSwipeRefreshLayout refresher;
         private Item item;
         protected override void OnCreate(Bundle bundle)
         {
@@ -71,24 +72,29 @@ namespace FactoryBarcode
             MobileBarcodeScanner.Initialize(Application);
 
             wv = this.FindViewById<WebView>(Resource.Id.webview);
-            refresher = FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
+            
+            refresher = FindViewById<CustomSwipeRefreshLayout>(Resource.Id.refresher);
+
+            refresher.setCanChildScrollUpCallback(this);
 
             refresher.SetColorScheme(Resource.Color.xam_dark_blue,
                                       Resource.Color.xam_purple,
                                       Resource.Color.xam_gray,
                                       Resource.Color.xam_green);
-
+            
             wv.Settings.JavaScriptEnabled = true;
 
             wv.AddJavascriptInterface(new JsInteration(this), "control");
 
             wv.Settings.SetSupportZoom(true);
             wv.Settings.BuiltInZoomControls = true;
+            
+
             wv.Settings.UseWideViewPort = true;
             wv.Settings.LoadWithOverviewMode = true;
 
             WebChromeClient wc = new WebChromeClient();
-
+            
             wv.SetWebChromeClient(wc);
 
             MyWebViewClient wvc = new MyWebViewClient(refresher);
@@ -96,12 +102,12 @@ namespace FactoryBarcode
             wv.SetWebViewClient(wvc);
 
             wv.LoadUrl(item.Link);
-
+            
             refresher.Refresh += delegate
             {
                 wv.Reload();
             };
-
+            
         }
 
         protected override void OnStart()
@@ -127,12 +133,9 @@ namespace FactoryBarcode
             var options = new ZXing.Mobile.MobileBarcodeScanningOptions();
             
             options.DelayBetweenAnalyzingFrames = 1000;
-          //  options.UseNativeScanning = true;
-           
 
             scanner.TopText = "Scanning.."; 
-            //scanner.Torch(true);
-            
+                     
             var result = await scanner.Scan(options);
 
             if (result != null)
@@ -146,21 +149,62 @@ namespace FactoryBarcode
             //base.OnConfigurationChanged(newConfig);
         }
 
+        public bool CanSwipeRefreshChildScrollUp()
+        {
+            //System.Diagnostics.Debug.WriteLine(wv.ScrollY.ToString(), "debug");
+            return wv.ScrollY > 0;
+            //throw new NotImplementedException();
+        }
+
         public static implicit operator MainActivity(Index1Activity v)
         {
             throw new NotImplementedException();
         }
     }
+    
+    public class CustomSwipeRefreshLayout: SwipeRefreshLayout
+    {
+        public CustomSwipeRefreshLayout(Context context):base(context)
+        {
+        }
+        public CustomSwipeRefreshLayout(Context context, IAttributeSet attrs) : base(context,attrs)
+        {
+        }
+        
+        private CanChildScrollUpCallback mCanChildScrollUpCallback;
+
+        public interface CanChildScrollUpCallback
+        {
+            
+            bool CanSwipeRefreshChildScrollUp();
+        }
+
+        public void setCanChildScrollUpCallback(CanChildScrollUpCallback canChildScrollUpCallback)
+        {
+            mCanChildScrollUpCallback = canChildScrollUpCallback;
+        }
+
+        public override bool CanChildScrollUp()
+        {
+            if (mCanChildScrollUpCallback != null)
+            {
+                return mCanChildScrollUpCallback.CanSwipeRefreshChildScrollUp();
+            }
+            return base.CanChildScrollUp();
+        }
+        
+    }
+
 
     public class MyWebViewClient : WebViewClient
     {
-        public SwipeRefreshLayout _refresher;
+        public CustomSwipeRefreshLayout _refresher;
 
-        public MyWebViewClient(SwipeRefreshLayout refresher)
+        public MyWebViewClient(CustomSwipeRefreshLayout refresher)
         {
             this._refresher = refresher;
         }
-
+        
         public override void OnPageStarted(WebView view, string url, Bitmap favicon)
         {
             base.OnPageStarted(view, url, favicon);
@@ -172,6 +216,14 @@ namespace FactoryBarcode
             base.OnPageFinished(view, url);
             this._refresher.Refreshing = false;
         }
+
+        public bool shouldOverrideUrlLoading(WebView view, String url)
+        {
+            view.LoadUrl(url);
+            return true;
+        }
+
+
     }
 
     public class Information
