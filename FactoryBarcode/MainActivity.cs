@@ -123,13 +123,15 @@ namespace FactoryBarcode
         {
             var scanner = new ZXing.Mobile.MobileBarcodeScanner();
 
+            scanner.AutoFocus();
             var options = new ZXing.Mobile.MobileBarcodeScanningOptions();
             
-            options.DelayBetweenAnalyzingFrames = 5000;
-            options.UseNativeScanning = true;
+            options.DelayBetweenAnalyzingFrames = 1000;
+          //  options.UseNativeScanning = true;
+           
 
             scanner.TopText = "Scanning.."; 
-            scanner.Torch(true);
+            //scanner.Torch(true);
             
             var result = await scanner.Scan(options);
 
