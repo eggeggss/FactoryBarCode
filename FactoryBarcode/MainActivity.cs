@@ -13,6 +13,7 @@ using Android.Widget;
 using Java.Interop;
 using MyUtil;
 using Newtonsoft.Json;
+using PublicStruct.cs;
 using System;
 using ZXing.Mobile;
 

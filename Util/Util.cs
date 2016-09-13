@@ -7,30 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+using PublicStruct.cs;
 namespace MyUtil
 {
-    public class AppSetting
-    {
-        public String WebAPI { set; get; }
-    }
-
-    public class Item : IComparable<Item>
-    {
-        [SQLite.PrimaryKey, SQLite.AutoIncrement]
-        public int ID { set; get; }
-
-        public string Descrip { set; get; }
-
-        public string Link { set; get; }
-
-        public int CompareTo(Item other)
-        {
-            return this.ID > other.ID ? -1 : 1;
-            // throw new NotImplementedException();
-        }
-    }
-
+   
     public class ItemDB
     {
         private SQLiteConnection _conn;
@@ -86,6 +66,14 @@ namespace MyUtil
         }
 
         #endregion InsertItem
+
+        #region UpdateItem
+        public void UpdateItem(Item item)
+        {
+            _conn.Update(item);
+        }
+
+        #endregion
 
         #region Delete
 

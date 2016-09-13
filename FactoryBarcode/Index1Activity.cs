@@ -10,6 +10,7 @@ using Android.Widget;
 using Java.IO;
 using MyUtil;
 using Newtonsoft.Json;
+using PublicStruct.cs;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -48,15 +49,20 @@ namespace FactoryBarcode
                     EventHandler<DialogClickEventArgs> ok = new EventHandler<DialogClickEventArgs>((s2, e2) =>
                     {
                         String descrip = v.FindViewById<EditText>(Resource.Id.editDescrip).Text;
-                        String uri = v.FindViewById<EditText>(Resource.Id.editUri).Text;
 
-                        Item itemNew = new Item() { Descrip = descrip, Link = uri };
+                        if (!(String.IsNullOrEmpty(descrip) || descrip == ""))
+                        {
 
-                        this._itemdb.InsertItem(itemNew);
-                        adapter.List.Add(itemNew);
-                        adapter.List.Sort();
-                        adapter.NotifyDataSetChanged();
-                        //Toast.MakeText(this, descrip, ToastLength.Short).Show();
+                            String uri = v.FindViewById<EditText>(Resource.Id.editUri).Text;
+
+
+                            Item itemNew = new Item() { Descrip = descrip, Link = uri };
+
+                            _itemdb.InsertItem(itemNew);
+                            adapter.List.Add(itemNew);
+                            adapter.List.Sort();
+                            adapter.NotifyDataSetChanged();
+                        }
                     });
 
                     Util.InputDialog(this, v, ok, null);
@@ -66,8 +72,32 @@ namespace FactoryBarcode
                 case Resource.Id.action_settings:
 
                     View viewAppsetting = this.LayoutInflater.Inflate(Resource.Layout.AppSetting, null);
+                    var editUri= viewAppsetting.FindViewById<EditText>(Resource.Id.editUri);
+                    var appsettings = this._itemdb.SelectAppSetting();
+                    AppSetting appsetting = null;
+                    if (appsettings.Count>0)
+                    {
+                        appsetting = appsettings[0];
+                    }
+                    else
+                    {
+                        appsetting = new AppSetting();
+                        appsetting.WebAPI = Resource2.DefaultWebAPI;
+                    }
 
-                    Util.InputDialog(this, viewAppsetting, null, null);
+                    editUri.Text = appsetting.WebAPI;
+
+                    EventHandler<DialogClickEventArgs> oksetting = new EventHandler<DialogClickEventArgs>((s2, e2) =>
+                    {
+                        String WebUri= viewAppsetting.FindViewById<EditText>(Resource.Id.editUri).Text;
+
+                        appsetting.WebAPI = WebUri;
+
+                        this._itemdb.UpdateOrInsertAppSetting(appsetting);
+
+                    });
+
+                    Util.InputDialog(this, viewAppsetting, oksetting, null);
 
                     //Toast.MakeText(this, "setting", ToastLength.Short).Show();
                     return true;
@@ -94,29 +124,31 @@ namespace FactoryBarcode
             ColorDrawable color = new ColorDrawable(Color.OrangeRed);
 
             this.ActionBar.SetBackgroundDrawable(color);
-
+            //http://eggeggss.ddns.net/sse/Request.aspx?catelog=GetBarCodeItem
             List<Item> list = new List<Item>();
             list.Add(new Item() { Descrip = "DevExpress", Link = "https://www.devexpress.com/" });
             list.Add(new Item() { Descrip = "Xamarin", Link = "https://www.xamarin.com/" });
             list.Add(new Item() { Descrip = "Microsoft", Link = "https://www.microsoft.com/zh-cn" });
             list.Add(new Item() { Descrip = "百度雲", Link = "https://login.bce.baidu.com/" });
             list.Add(new Item() { Descrip = "小米官網", Link = "http://www.mi.com/tw/events/school831/" });
-            //list.Add(new Item() { Descrip = "奇摩", Link = "http://www.yahoo.com.tw" });
-            //list.Add(new Item() { Descrip = "Google", Link = "http://www.google.com" });
-            //list.Add(new Item() { Descrip = "facebook", Link = "http://www.facebook.com" });
-            //list.Add(new Item() { Descrip = "PCHOME", Link = "http://www.pchome.com.tw/" });
-            
+            list.Add(new Item() { Descrip = "奇摩", Link = "http://www.yahoo.com.tw" });
+
             list.Add(new Item() { Descrip = "Xpage測試報表", Link = "http://arc-ap2.arcadyan.com.tw/GP/VendorReport.nsf/TEST.xsp" });
 
             list.Add(new Item() { Descrip = "測試報表", Link = "http://eggeggss.ddns.net/notesbarcode/notesservice1.aspx" });
 
             string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+
             _itemdb = new ItemDB(folder);
 
-            //_itemdb.DeleteAllItem();
-            _itemdb.InsertAllItem(list);
-
             List<Item> listFromDb = _itemdb.SelectItem();
+
+            if (listFromDb.Count==0)
+            {
+                _itemdb.InsertAllItem(list);
+                listFromDb = _itemdb.SelectItem();
+            }
+           
 
             var listview = this.FindViewById<ListView>(Resource.Id.listview);
 
@@ -193,10 +225,39 @@ namespace FactoryBarcode
             {
                 convertView = this.Context.LayoutInflater.Inflate(Resource.Layout.ItemRow, null);
 
-                var btn_open = convertView.FindViewById<Button>(Resource.Id.btn_open);
+                var btn_update = convertView.FindViewById<Button>(Resource.Id.btn_update);
                 //opent
-                btn_open.Click += (s1, e1) =>
+                btn_update.Click += (s1, e1) =>
                 {
+                    var view=this.Context.LayoutInflater.Inflate(Resource.Layout.Dialog,null);
+
+                    var editDescript=view.FindViewById<EditText>(Resource.Id.editDescrip);
+                    var editUri = view.FindViewById<EditText>(Resource.Id.editUri);
+
+                    var thisbtn = s1 as Button;
+                    Int32 ll_position = Convert.ToInt32(thisbtn.Tag);
+                    var item_row = this.List[ll_position];
+                    //String itemRowJson = JsonConvert.SerializeObject(item_row);
+
+                    editDescript.Text = item_row.Descrip;
+                    editUri.Text = item_row.Link;
+
+                    EventHandler<DialogClickEventArgs> ok = new EventHandler<DialogClickEventArgs>((s2, e2) =>
+                    {
+                        String descrip = view.FindViewById<EditText>(Resource.Id.editDescrip).Text;
+                        String uri = view.FindViewById<EditText>(Resource.Id.editUri).Text;
+
+                        item_row.Descrip = descrip;
+                        item_row.Link = uri;                     
+
+                        this.Context._itemdb.UpdateItem(item_row);
+                        
+                        //Toast.MakeText(this, descrip, ToastLength.Short).Show();
+                    });
+
+                    Util.InputDialog(this.Context, view, ok, null);
+
+                    /*
                     var thisbtn = s1 as Button;
                     Int32 ll_position = Convert.ToInt32(thisbtn.Tag);
 
@@ -208,6 +269,7 @@ namespace FactoryBarcode
                     intent.PutExtra("ItemRow", itemRowJson);
 
                     this.Context.StartActivity(intent);
+                    */
                 };
                 //delete
                 var btn_delete = convertView.FindViewById<Button>(Resource.Id.btn_delete);
@@ -254,7 +316,7 @@ namespace FactoryBarcode
             }
 
             Item item = List[position];
-            var btn = convertView.FindViewById<Button>(Resource.Id.btn_open);
+            var btn = convertView.FindViewById<Button>(Resource.Id.btn_update);
             var btnDel = convertView.FindViewById<Button>(Resource.Id.btn_delete);
             btnDescrip = convertView.FindViewById<Button>(Resource.Id.descrip);
             btn.Tag = position;
@@ -268,7 +330,6 @@ namespace FactoryBarcode
 
             var layoutBtn = btn.LayoutParameters;
             layoutBtn.Width =   150;
-
 
             var layoutDel = btnDel.LayoutParameters;
             layoutDel.Width = 150;
