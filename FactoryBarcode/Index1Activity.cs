@@ -7,9 +7,11 @@ using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
+using Common.Util;
 using Java.IO;
 using MyUtil;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PublicStruct.cs;
 using SQLite;
 using System;
@@ -32,6 +34,26 @@ namespace FactoryBarcode
         public ItemDB _itemdb;
         private MyList adapter;
         public Int32 mDeviceWidth, mDeviceHeight;
+        
+        public AppSetting AppSetting {
+            
+            get
+            {
+                var appsettings = _itemdb.SelectAppSetting();
+                AppSetting appsetting = null;
+                if (appsettings.Count > 0)
+                {
+                    appsetting = appsettings[0];
+                }
+                else
+                {
+                    appsetting = new AppSetting();
+                    appsetting.WebAPI = Resource2.DefaultWebAPI;
+                }
+                return appsetting;
+            }
+
+        }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -55,7 +77,6 @@ namespace FactoryBarcode
 
                             String uri = v.FindViewById<EditText>(Resource.Id.editUri).Text;
 
-
                             Item itemNew = new Item() { Descrip = descrip, Link = uri };
 
                             _itemdb.InsertItem(itemNew);
@@ -74,17 +95,8 @@ namespace FactoryBarcode
                     View viewAppsetting = this.LayoutInflater.Inflate(Resource.Layout.AppSetting, null);
                     var editUri= viewAppsetting.FindViewById<EditText>(Resource.Id.editUri);
                     var appsettings = this._itemdb.SelectAppSetting();
-                    AppSetting appsetting = null;
-                    if (appsettings.Count>0)
-                    {
-                        appsetting = appsettings[0];
-                    }
-                    else
-                    {
-                        appsetting = new AppSetting();
-                        appsetting.WebAPI = Resource2.DefaultWebAPI;
-                    }
-
+                    AppSetting appsetting = this.AppSetting;
+                    
                     editUri.Text = appsetting.WebAPI;
 
                     EventHandler<DialogClickEventArgs> oksetting = new EventHandler<DialogClickEventArgs>((s2, e2) =>
@@ -133,9 +145,9 @@ namespace FactoryBarcode
             list.Add(new Item() { Descrip = "小米官網", Link = "http://www.mi.com/tw/events/school831/" });
             list.Add(new Item() { Descrip = "奇摩", Link = "http://www.yahoo.com.tw" });
 
-            list.Add(new Item() { Descrip = "Xpage測試報表", Link = "http://arc-ap2.arcadyan.com.tw/GP/VendorReport.nsf/TEST.xsp" });
+           // list.Add(new Item() { Descrip = "Xpage測試報表", Link = "http://arc-ap2.arcadyan.com.tw/GP/VendorReport.nsf/TEST.xsp" });
 
-            list.Add(new Item() { Descrip = "測試報表", Link = "http://eggeggss.ddns.net/notesbarcode/notesservice1.aspx" });
+            //list.Add(new Item() { Descrip = "測試報表", Link = "http://eggeggss.ddns.net/notesbarcode/notesservice1.aspx" });
 
             string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
 
@@ -148,8 +160,6 @@ namespace FactoryBarcode
                 _itemdb.InsertAllItem(list);
                 listFromDb = _itemdb.SelectItem();
             }
-           
-
             var listview = this.FindViewById<ListView>(Resource.Id.listview);
 
             adapter = new MyList();
@@ -162,12 +172,33 @@ namespace FactoryBarcode
 
             var refresh = this.FindViewById<SwipeRefreshLayout>(Resource.Id.refresher1);
 
-            refresh.Refresh += (s1, e1) =>
+            refresh.Refresh +=async (s1, e1) =>
             {
-                var items = _itemdb.SelectItem();
-                adapter.List = items;
+                try
+                {
+                    String uri = this.AppSetting.WebAPI;
+
+                    if (!(String.IsNullOrEmpty(uri)))
+                    {
+                        
+                        var items = await WebApi.DownloadJsonDataCustom<IEnumerable<Item>>(uri);
+                        
+                        foreach (var item in items)
+                        {
+                            _itemdb.InsertItem(item);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toast.MakeText(this, "下載失敗 " + ex.Message, ToastLength.Short).Show();
+                    //Util.Dialog(this, "Information", "Please Check NetWork Status", null, null);
+                }
+                var dbitems = _itemdb.SelectItem();
+                adapter.List = dbitems;
                 adapter.NotifyDataSetChanged();
                 refresh.Refreshing = false;
+                
             };
             // Create your application here
         }
@@ -184,8 +215,6 @@ namespace FactoryBarcode
         public Index1Activity Context;
         public List<Item> List;
         public Int32 DeviceWidth,DeviceHeight;
-
-
 
         public override Item this[int position]
         {
