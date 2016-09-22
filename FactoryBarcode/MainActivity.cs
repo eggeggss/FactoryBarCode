@@ -129,11 +129,12 @@ namespace FactoryBarcode
         public async void CallWebViewSendData()
         {
             var scanner = new ZXing.Mobile.MobileBarcodeScanner();
-
+            
             scanner.AutoFocus();
             var options = new ZXing.Mobile.MobileBarcodeScanningOptions();
             
             options.DelayBetweenAnalyzingFrames = 1000;
+      
 
             scanner.TopText = "Scanning.."; 
                      
