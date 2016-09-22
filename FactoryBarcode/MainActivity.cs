@@ -38,7 +38,7 @@ namespace FactoryBarcode
             RequestWindowFeature(WindowFeatures.NoTitle);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-
+            /**/
             var j = this.Intent.GetStringExtra("ItemRow");
             item = JsonConvert.DeserializeObject<Item>(j);
 
